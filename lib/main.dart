@@ -28,21 +28,36 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
 String errorTextHolder="";
 String errorText="";
 String textId="your andriod ID will be shown Here !!!";
+String dateTextHolder="Pulse Date";
+String lang ="Longitude";
+String lat ="Latitude";
 String? uuid;
 
+late DateTime? date;
+late StreamSubscription _sub;
+
 bool isLive=false;
+
+late Position position;
+
 AndroidId id =const AndroidId();
+
+LocationSettings locationSettings= const LocationSettings(
+    accuracy: LocationAccuracy.high,
+    distanceFilter: 0,
+    );
 
  @override
   void initState() {
     super.initState();
     getUuid();
-    //print(DateTime.now());
     isLive=false;
   }
+
 
 void  getUuid() async {
   uuid = await id.getId();
@@ -51,9 +66,6 @@ void  getUuid() async {
   });
 }
 
-
-String lang ="Longitude";
-String lat ="Latitude";
 
 Future<Position> _getCurLoc() async{
   bool serviceEnabled=  await Geolocator.isLocationServiceEnabled();
@@ -97,15 +109,6 @@ Future<Position> _getCurLoc() async{
 }
 
 
-LocationSettings locationSettings= const LocationSettings(
-    accuracy: LocationAccuracy.high,
-    distanceFilter: 0,
-    );
-late Position position;
-
-String dateTextHolder="Pulse Date";
-late DateTime? date;
-late StreamSubscription _sub;
 void _liveLoction(){
     _sub=Geolocator.getPositionStream(locationSettings: locationSettings)
     .listen((position) {
@@ -148,23 +151,6 @@ void calLoc (){
             SizedBox(height: 15),
             Text(dateTextHolder ,style: TextStyle(fontSize: 20),),
             SizedBox(height: 60),
-            /*ElevatedButton(
-              onPressed:(){
-                
-                _getCurLoc().then((value) {
-                  lat= '${value.latitude}';
-                  lang ='${value.longitude}';
-                  
-                  _liveLoction();
-                });
-              },
-              child: Text("Get Cur Loc")),
-          
-              if (isLive==true) 
-                ElevatedButton(onPressed: calLoc, child:  Text("stop"))
-                else 
-                ElevatedButton(onPressed: null, child:  Text("stop")),
-                  */
                 if (isLive==true) 
                 ElevatedButton(onPressed: calLoc, child:  Text("Stop" ,style: TextStyle(fontSize: 24),) ,
                 style: ButtonStyle(shape: MaterialStateProperty.all(CircleBorder()),
