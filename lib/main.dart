@@ -35,21 +35,14 @@ String textId="your andriod ID will be shown Here !!!";
 String dateTextHolder="Pulse Date";
 String lang ="Longitude";
 String lat ="Latitude";
-String? uuid;
+
 
 late DateTime? date;
 late StreamSubscription _sub;
 
 bool isLive=false;
 
-late Position position;
 
-AndroidId id =const AndroidId();
-
-LocationSettings locationSettings= const LocationSettings(
-    accuracy: LocationAccuracy.high,
-    distanceFilter: 0,
-    );
 
  @override
   void initState() {
@@ -57,7 +50,10 @@ LocationSettings locationSettings= const LocationSettings(
     getUuid();
     isLive=false;
   }
+///////////////////////////////
 
+String? uuid;
+AndroidId id =const AndroidId();
 
 void  getUuid() async {
   uuid = await id.getId();
@@ -65,7 +61,7 @@ void  getUuid() async {
     textId=uuid!.toUpperCase();
   });
 }
-
+/////////////////////////////////////////////////
 
 Future<Position> _getCurLoc() async{
   bool serviceEnabled=  await Geolocator.isLocationServiceEnabled();
@@ -107,7 +103,14 @@ Future<Position> _getCurLoc() async{
     isLive=true;
   return await Geolocator.getCurrentPosition();
 }
+///////////////////////////////////////////////////////
 
+late Position position;
+
+LocationSettings locationSettings= const LocationSettings(
+    accuracy: LocationAccuracy.high,
+    distanceFilter: 0,
+    );
 
 void _liveLoction(){
     _sub=Geolocator.getPositionStream(locationSettings: locationSettings)
@@ -123,13 +126,16 @@ void _liveLoction(){
      });
      });
 }
+
+
 void calLoc (){
   _sub.cancel();
   setState(() {
     isLive=false;
   });
-  
   }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,7 +147,7 @@ void calLoc (){
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(errorTextHolder,style: TextStyle(fontSize: 20),),
+            Text(errorTextHolder,style: TextStyle(fontSize: 20,color: Colors.red),),
             SizedBox(height: 15),
             Text(textId,style: TextStyle(fontSize: 20),),
             SizedBox(height: 15),
@@ -155,7 +161,7 @@ void calLoc (){
                 ElevatedButton(onPressed: calLoc, child:  Text("Stop" ,style: TextStyle(fontSize: 24),) ,
                 style: ButtonStyle(shape: MaterialStateProperty.all(CircleBorder()),
                 padding: MaterialStateProperty.all(EdgeInsets.all(20)),
-                 backgroundColor: MaterialStateProperty.all(Colors.red),
+                backgroundColor: MaterialStateProperty.all(Colors.red),
                 )
                 )
                 else
@@ -169,7 +175,7 @@ void calLoc (){
                 }, child:  Text("Go" ,style: TextStyle(fontSize: 24),) ,
                 style: ButtonStyle(shape: MaterialStateProperty.all(CircleBorder()),
                 padding: MaterialStateProperty.all(EdgeInsets.all(20)),
-                 backgroundColor: MaterialStateProperty.all(Colors.green),
+                backgroundColor: MaterialStateProperty.all(Colors.green),
                 )
                 ),
             ]
